@@ -77,7 +77,8 @@ export default {
     clear(){
       localStorage.cartItems = "";
       console.log(localStorage.cartItems)
-      location.href = "/"
+      this.$router.push({name:'admin', params: { USER: this.$route.params.USER }})
+      // this.$route.params.USER
     }
   },
 

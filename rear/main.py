@@ -77,5 +77,56 @@ def login(account, password):
         else:
             return account
 
+@app.get("/new/{name}/{img_url}/{price}/{detail}")
+def new(name, img_url, price, detail):
+    command = f"SELECT MAX(id) FROM products"
+    cursor2.execute(command)
+    r = cursor2.fetchone()
+    print(r)
+    print(type (r[0]))
+    id=r[0]+1
+    command = f"INSERT INTO `products` (`name`, `img_url`, `price`, `detail`, `id`) VALUES (\"{name}\", \"{img_url}\", \"{price}\", \"{detail}\", \"{id}\");"
+    cursor2.execute(command)
+    c.commit()
+    return "newS"
+
+
+@app.get("/products")
+def getProducts():
+    command = f"SELECT * FROM products"
+    cursor.execute(command)
+    r = cursor.fetchall()
+    c.commit()
+    print(r)
+    return r
+
+@app.get("/del/{id}")
+def delProducts(id):
+    command = f"DELETE FROM products WHERE id = \"{id}\""
+    cursor.execute(command)
+    c.commit()
+    return "DEL"
+
+@app.get("/edit/{id}/{name}/{img_url}/{price}/{detail}")
+def editProducts(id, name, img_url, price, detail):
+    command = f"UPDATE products SET name=\"{name}\",img_url=\"{img_url}\",price=\"{price}\",detail=\"{detail}\" WHERE id =\"{id}\""
+    cursor.execute(command)
+    c.commit()
+    return "EDIT"
+
+@app.get("/search/{key}")
+def editProducts(key):
+    command = f"SELECT * FROM products WHERE name LIKE '%{key}%'"
+    cursor.execute(command)
+    r = cursor.fetchall()
+    c.commit()
+    print(r)
+    return r
+
+#'http://localhost:8000/products/' + key
+#'http://localhost:8000/edit/' + id +'/' + this.editedData.newName + '/' + this.editedData.img_url + '/' + this.editedData.price + '/' + this.editedData.detail
+#'http://localhost:8000/del/' + delname
+#'http://localhost:8000/products'
+#'http://localhost:8000/new/' + this.arr.name + '/' + this.arr.img_url  + '/' + this.arr.price  + '/' + this.arr.detail
 #'http://localhost:8000/login/' + this.account + '/' + this.password
 #'http://localhost:8000/checkaccount/' + this.account

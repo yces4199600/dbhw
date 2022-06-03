@@ -87,7 +87,7 @@
             </div>
             <div class="form-group">
               <label for="exampleInputPassword1">商品細節</label>
-              <textarea name="description" rows="5" class="form-control" v-model="arr.detail"></textarea>
+              <textarea name="detail" rows="5" class="form-control" v-model="arr.detail"></textarea>
             </div>
         </div>
         <div class="modal-footer">
@@ -151,14 +151,24 @@ export default {
       this.num=0
       this.$router.push("Index")
     },
+    // createProduct(){
+    //   this.$http.post(process.env.VUE_APP_BACKEND_URL + "new",
+    //   {
+    //     name: this.arr.name,
+    //     imageUrl: this.arr.img_url,
+    //     price: this.arr.price,
+    //     detail: this.arr.detail
+    //   })
+    //   .then( () => this.$emitter.emit('reload',1))
+    //   .catch( r => console.log(r))
+
+    //   this.arr.name= ""
+    //   this.arr.img_url= ""
+    //   this.arr.price= 0
+    //   this.arr.detail= ""
+    // }
     createProduct(){
-      this.$http.post(process.env.VUE_APP_BACKEND_URL + "new",
-      {
-        name: this.arr.name,
-        imageUrl: this.arr.img_url,
-        price: this.arr.price,
-        description: this.arr.detail
-      })
+      this.$http.get('http://localhost:8000/new/' + this.arr.name + '/' + this.arr.img_url  + '/' + this.arr.price  + '/' + this.arr.detail)
       .then( () => this.$emitter.emit('reload',1))
       .catch( r => console.log(r))
 
