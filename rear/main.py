@@ -75,7 +75,7 @@ def login(account, password):
         if(str(r[0]) != password):
             return "F" 
         else:
-            return "S"
+            return account
 
 #'http://localhost:8000/login/' + this.account + '/' + this.password
 #'http://localhost:8000/checkaccount/' + this.account

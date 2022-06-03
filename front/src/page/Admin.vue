@@ -14,7 +14,7 @@ import Card from '@/components/ItemCard.vue'
 
 
 export default {
-  name: "Admin",
+  name: "admin",
   data() {
     return {
     }

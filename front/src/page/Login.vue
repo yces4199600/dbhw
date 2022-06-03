@@ -46,7 +46,7 @@ export default {
         else {
           console.log(r)
           alert("登入成功")
-          this.$router.push({name:'admin'})
+          this.$router.push({name:'admin', params: { USER: r.data }})
         }
       })
         .catch( r => console.log(r))
