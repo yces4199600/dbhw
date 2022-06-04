@@ -97,8 +97,9 @@ def getProducts():
     cursor.execute(command)
     r = cursor.fetchall()
     c.commit()
-    print(r)
+    print(type(r))
     return r
+#getProducts()
 
 @app.get("/del/{id}")
 def delProducts(id):
@@ -123,6 +124,18 @@ def editProducts(key):
     print(r)
     return r
 
+@app.get("/cartdata/{cartlist}")
+def getcartdata(cartlist):
+    command = f"SELECT * FROM products WHERE id IN({cartlist})"
+    print(command)
+    cursor.execute(command)
+    r = cursor.fetchall()
+    c.commit()
+    print(r)
+    return r
+
+c.commit()
+#'http://localhost:8000/cartdata'+'/'+ this.getId
 #'http://localhost:8000/products/' + key
 #'http://localhost:8000/edit/' + id +'/' + this.editedData.newName + '/' + this.editedData.img_url + '/' + this.editedData.price + '/' + this.editedData.detail
 #'http://localhost:8000/del/' + delname
