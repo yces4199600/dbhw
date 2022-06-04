@@ -1,21 +1,22 @@
 <template>
   <!-- <Index/> -->
   <!-- 舉例用的頁面 -->
-  <Navbar/>
+  <!-- <Navbar/> -->
   <router-view></router-view>
 </template>
 
 <script>
-import Navbar from './components/Navbar.vue'
+// import Navbar from './components/Navbar.vue'
 // import Index from './page/Index.vue'
-
+localStorage.userid=''
 export default {
   name: 'App',
   components: {
-    Navbar
+    //Navbar
     //Index
   }
 }
+
 </script>
 
 <style>

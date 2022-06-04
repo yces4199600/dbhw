@@ -77,7 +77,7 @@ export default {
     clear(){
       localStorage.cartItems = "";
       console.log(localStorage.cartItems)
-      this.$router.push({name:'admin', params: { USER: this.$route.params.USER }})
+      this.$router.push({name:'admin', params: { USER:localStorage.userid }})
       // this.$route.params.USER
     }
   },

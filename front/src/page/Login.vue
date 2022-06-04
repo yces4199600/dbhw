@@ -20,7 +20,7 @@ export default {
   data() {
     return {
       account: '',
-      password: ''
+      password: '',
     }
   },
   computed: {
@@ -46,7 +46,8 @@ export default {
         else {
           console.log(r)
           alert("登入成功")
-          this.$router.push({name:'admin', params: { USER: r.data }})
+          localStorage.userid = r.data
+          this.$router.push({name:'admin', params: { USER: localStorage.userid }})
         }
       })
         .catch( r => console.log(r))

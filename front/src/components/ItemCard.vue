@@ -88,15 +88,13 @@ export default {
         price: 0,
         detail: '',
       },
-      cartItems: [
-
-      ],
+      cartItems: [],
     };
   },
   computed: {
     itemList: function () { return this.arr },
     show: function(){
-      return this.$route.params.USER=="admin"
+      return localStorage.userid=="admin"
     },
   },
   components: {

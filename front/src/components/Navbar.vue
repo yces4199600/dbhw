@@ -14,35 +14,43 @@
       >
         <span class="navbar-toggler-icon"></span>
       </button>
-      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+
+
+      <div class="collapse navbar-collapse" id="navbarSupportedContent" v-if= checkstate()>
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
           <li class="nav-item">
-            <!--
-            直接將 <a></a> 取代成 <router-link></router-link>
-            class 的部分都不用變更，但是 href 要刪掉，換成 to=""
-              -->
             <router-link to="/" class="nav-link active" aria-current="page" :class="isAdmin">首頁</router-link>
           </li>
         </ul>
-
-        <ul class="navbar-nav mb-2 mb-lg-0 d-flex not-login" v-if="show">
-          <li class="nav-item">
-            <router-link to="/login" class="nav-link">登入</router-link>
+        <ul class="navbar-nav mb-2 mb-lg-0 d-flex not-login" >
+          <li class="nav-item" >
+            <router-link to="/login" class="nav-link" >登入</router-link>
           </li>
           <li class="nav-item">
             <router-link to="/signup" class="nav-link">註冊</router-link>
           </li>
+          <li class="nav-item">
+            <router-link to="/cart" class="nav-link">購物車({{num}})</router-link>
+          </li>
         </ul>
-
-        <ul class="navbar-nav mb-2 mb-lg-0 d-flex is-login">
+      </div>
+      <div class="collapse navbar-collapse" id="navbarSupportedContent" v-else>
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <li class="nav-item">
+            <router-link to="/" class="nav-link active" aria-current="page" :class="isAdmin">首頁</router-link>
+          </li>
+        </ul>
+        <ul class="navbar-nav mb-2 mb-lg-0 d-flex not-login" >
           <li class="nav-item">
             <router-link to="/cart" class="nav-link">購物車({{num}})</router-link>
           </li>
           <li class="nav-item">
-            <a @click="logout()" class="nav-link" href=""  v-if="!show">登出</a>
+            <a @click="logout()" class="nav-link" href="">登出</a>
           </li>
         </ul>
       </div>
+
+
       <button class="btn btn-outline-success my-2 my-sm-0" type="submit" data-toggle="modal" data-target="#searchBotton">Search</button>
       <button class="btn btn-outline-warning my-2 my-sm-0" type="submit" data-toggle="modal" data-target="#createBotton"  v-if="adminshow">Create</button>
     </div>
@@ -117,25 +125,33 @@ export default {
       key: "",
     }
   },
+  watch:{
+  },
   computed: {
     buy: function () {
       return this.num
     },
-    show: function(){
-      return this.$route.params.USER==null
-    },
     adminshow: function(){
-      return this.$route.params.USER=="admin"
+      return localStorage.userid=="admin"
     },
     isAdmin: function () {
       if(this.$route.name == 'Admin') return "disabled"
       else return ""
     },
   },
-  components: {
-
-  },
   methods: {
+    checkstate(){
+      console.log("checkstate")
+      console.log("USER:",localStorage.userid)
+      if(localStorage.userid == ""){
+        console.log("state= 未登入")
+        return true
+      }
+      else{
+        console.log("state= 已登入")
+        return false
+      }
+    },
     searchKey(){
       this.$emitter.emit('keyword',this.key)
       this.key= ""
@@ -149,24 +165,9 @@ export default {
     },
     logout(){
       this.num=0
+      localStorage.userid=null
       this.$router.push("Index")
     },
-    // createProduct(){
-    //   this.$http.post(process.env.VUE_APP_BACKEND_URL + "new",
-    //   {
-    //     name: this.arr.name,
-    //     imageUrl: this.arr.img_url,
-    //     price: this.arr.price,
-    //     detail: this.arr.detail
-    //   })
-    //   .then( () => this.$emitter.emit('reload',1))
-    //   .catch( r => console.log(r))
-
-    //   this.arr.name= ""
-    //   this.arr.img_url= ""
-    //   this.arr.price= 0
-    //   this.arr.detail= ""
-    // }
     createProduct(){
       this.$http.get('http://localhost:8000/new/' + this.arr.name + '/' + this.arr.img_url  + '/' + this.arr.price  + '/' + this.arr.detail)
       .then( () => this.$emitter.emit('reload',1))
@@ -179,10 +180,11 @@ export default {
     }
   },
   mounted(){
-      this.$emitter.on('cartNum',()=>{
-        this.num++
-        console.log(this.num)
-      })
+    console.log("NAV ID=",localStorage.userid)
+    this.$emitter.on('cartNum',()=>{
+      this.num++
+      console.log(this.num)
+    })
   },
 };
 </script>
