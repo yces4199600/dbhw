@@ -19,11 +19,11 @@
 
       <!-- 範例卡片 -->
       <div class="card col-4" v-for="item in itemList" :key="item.id">
-        <img :src="item.imageUrl" class="card-img-top" alt="瑪利歐派對 超級巨星"/>
+        <img :src="item.img_url" class="card-img-top" alt="image not found"/>
           <div class="card-body">
           <h5 class="card-title">{{ item.name }}</h5>
           <a class="id" style="display: none">{{ item.id }}</a>
-          <p class="card-text">{{ item.description }}</p>
+          <p class="card-text">{{ item.detail }}</p>
           <button @click="plus(item.id)" class="btn btn-primary me-md-2">{{ item.price }}</button>
 
           <!-- <a href="modifyFile" class="btn btn-danger">修改</a> -->
@@ -47,7 +47,7 @@
                     </div>
                     <div class="form-group">
                       <label for="exampleInputPassword1">商品圖片</label>
-                      <input  class="form-control" name="imageUrl" :value="item.imageUrl">
+                      <input  class="form-control" name="img_url" :value="item.img_url">
                     </div>
                     <div class="form-group">
                       <label for="exampleInputPassword1">商品價錢</label>
@@ -55,7 +55,7 @@
                     </div>
                     <div class="form-group">
                       <label for="exampleInputPassword1">商品細節</label>
-                      <textarea name="description" rows="5" class="form-control" :value="item.description"></textarea>
+                      <textarea name="detail" rows="5" class="form-control" :value="item.detail"></textarea>
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -84,19 +84,17 @@ export default {
       editedData: {
         oldName: '',
         newName: '',
-        imageUrl: '',
+        img_url: '',
         price: 0,
-        description: '',
+        detail: '',
       },
-      cartItems: [
-
-      ],
+      cartItems: [],
     };
   },
   computed: {
     itemList: function () { return this.arr },
     show: function(){
-      return this.$route.params.USER=="admin"
+      return localStorage.userid=="admin"
     },
   },
   components: {
@@ -109,17 +107,18 @@ export default {
   },
   methods: {
     getData(){
-      this.$http.get(process.env.VUE_APP_BACKEND_URL + "products")
+      this.$http.get('http://localhost:8000/products')
         .then( r => this.arr = r.data)
         .catch( r => console.log(r))
     },
     searchData(key){
-      this.$http.get(process.env.VUE_APP_BACKEND_URL + "products/"+ key)
+      this.$http.get('http://localhost:8000/search/' + key)
         .then( r => {
           if(r.data.length == 0){
             alert("查無符合項目!")
             this.getData()
-          } else this.arr = r.data
+          } 
+          else this.arr = r.data
         })
         .catch( r => console.log(r))
     },
@@ -150,29 +149,19 @@ export default {
       let b = document.getElementById("form-"+id).getElementsByTagName("textarea")
       this.editedData.oldName = a[0].placeholder
       this.editedData.newName = a[1].value
-      this.editedData.imageUrl = a[2].value
+      this.editedData.img_url = a[2].value
       this.editedData.price = a[3].value
-      this.editedData.description = b[0].value
+      this.editedData.detail = b[0].value
 
-      this.$http.post(process.env.VUE_APP_BACKEND_URL + "edit",
-      {
-        oldName: this.editedData.oldName,
-        newName: this.editedData.newName,
-        imageUrl: this.editedData.imageUrl,
-        price: this.editedData.price,
-        description: this.editedData.description
-      })
+      this.$http.get('http://localhost:8000/edit/' + id +'/' + this.editedData.newName + '/' + this.editedData.img_url + '/' + this.editedData.price + '/' + this.editedData.detail)
       .then( () => this.getData())
       .catch( r => console.log(r))
     },
-    deleteItem(p){
+    deleteItem(id){
       // TODO:
       // 同上但是後端還沒寫
-      this.$http.post(process.env.VUE_APP_BACKEND_URL + "deleteProduct",{id: p})
-      .then( () => {
-        this.getData()
-        console.log("9999")
-        })
+      this.$http.get('http://localhost:8000/del/' + id)
+      .then( () => this.getData())
       .catch( r => console.log(r))
     },
   }

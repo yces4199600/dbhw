@@ -7,14 +7,13 @@
     <div class="row g-0" v-for="(item,index) in itemList" :key="item.id" :id="'card-' + item.id">
 
       <div class="col-md-4">
-        <img :src="item.imageUrl" class="card-img-top" alt="瑪利歐派對 超級巨星"/>
+        <img :src="item.img_url" class="card-img-top" alt="瑪利歐派對 超級巨星"/>
       </div>
-
       <div class="col-md-8" >
         <div class="card-body">
           <h5 class="card-title">{{ item.name }}</h5>
           <a class="id" style="display: none">{{ item.id }}</a>
-          <p class="card-text">{{ item.description }}</p>
+          <p class="card-text">{{ item.detail }}</p>
           <p>訂購數量：{{cartItems[index].hitTimes}}</p>
           <button @click="remove(item.id)" class="btn btn-primary me-md-2 btn-danger">移除此商品</button>
 
@@ -35,7 +34,8 @@ export default {
     return {
       arr: [],
       cartItems: [],
-      getId: []
+      getId: [],
+      currentcard:'',
     }
   },
   computed: {
@@ -52,21 +52,16 @@ export default {
     // console.log(this.cartItems)
   },
   methods: {
-
     getCartData(){
       if(localStorage.cartItems){
         this.cartItems = JSON.parse(localStorage.cartItems)
         for(let i=0;i<Object.keys(this.cartItems).length;i++){
-          console.log(this.cartItems[i].id)
+          console.log("thiscard",this.cartItems[i].id)
           this.getId.push(this.cartItems[i].id)
+          this.$http.get('http://localhost:8000/cartdata'+'/'+ this.getId)
+          .then( r => this.arr = r.data)
+          .catch()
         }
-        this.$http.post(process.env.VUE_APP_BACKEND_URL + "productsOfCart", {
-          cartItems: this.getId
-        })
-        .then( r => {
-          this.arr = r.data
-        })
-        .catch( r => console.log(r))
       }
     },
     remove(id){
@@ -77,7 +72,8 @@ export default {
     clear(){
       localStorage.cartItems = "";
       console.log(localStorage.cartItems)
-      location.href = "/"
+      this.$router.push({name:'admin', params: { USER:localStorage.userid }})
+      // this.$route.params.USER
     }
   },
 

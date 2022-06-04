@@ -1,5 +1,6 @@
 <template>
-  <span v-if="!show">
+  <Navbar/>
+  <span v-if=log()>
     現在的使用者是{{USER}}
   </span>
   <Carousel/>
@@ -10,26 +11,37 @@
 
 import Carousel from '@/components/Carousel.vue'
 import Card from '@/components/ItemCard.vue'
+import Navbar from '@/components/Navbar.vue'
 
 
 
 export default {
-  name: "Admin",
+  name: "admin",
   data() {
     return {
+      USER:localStorage.userid
     }
   },
-  computed: {
-    USER: function () {
-      return this.$route.params.USER
-    },
-    show: function(){
-      return this.$route.params.USER==null
-    },
-  },
+  // computed: {
+  //   USER: function () {
+  //     return 
+  //   },
+  // },
   components: {
+    Navbar,
     Carousel,
     Card,
+  },
+    methods:{
+    log(){
+      console.log("show")
+      if(localStorage.userid == ''){
+        return false
+      }
+      else{
+        return true
+      }
+    }
   }
 }
 </script>
