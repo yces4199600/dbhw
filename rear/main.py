@@ -16,8 +16,8 @@ db_settings = {
     "host": "127.0.0.1",
     "port": 3306,
     "user": "root",
-    "password": "rootroot",
-    "db": "new_schema",
+    "password": "",
+    "db": "shopdb",
     "charset": "utf8",
 }
 
@@ -77,15 +77,15 @@ def login(account, password):
         else:
             return account
 
-@app.get("/new/{name}/{img_url}/{price}/{detail}")
-def new(name, img_url, price, detail):
+@app.get("/new/{name}/{price}/{detail}")
+def new(name, price, detail):
     command = f"SELECT MAX(id) FROM products"
     cursor2.execute(command)
     r = cursor2.fetchone()
     print(r)
     print(type (r[0]))
     id=r[0]+1
-    command = f"INSERT INTO `products` (`name`, `img_url`, `price`, `detail`, `id`) VALUES (\"{name}\", \"{img_url}\", \"{price}\", \"{detail}\", \"{id}\");"
+    command = f"INSERT INTO `products` (`name`, `price`, `detail`, `id`) VALUES (\"{name}\", \"{price}\", \"{detail}\", \"{id}\");"
     cursor2.execute(command)
     c.commit()
     return "newS"
@@ -108,11 +108,12 @@ def delProducts(id):
     c.commit()
     return "DEL"
 
-@app.get("/edit/{id}/{name}/{img_url}/{price}/{detail}")
-def editProducts(id, name, img_url, price, detail):
-    command = f"UPDATE products SET name=\"{name}\",img_url=\"{img_url}\",price=\"{price}\",detail=\"{detail}\" WHERE id =\"{id}\""
+@app.get("/edit/{id}/{name}/{price}/{detail}")
+def editProducts(id, name, price, detail):
+    command = f"UPDATE products SET name=\"{name}\",price=\"{price}\",detail=\"{detail}\" WHERE id =\"{id}\""
     cursor.execute(command)
     c.commit()
+    print("EDIT")
     return "EDIT"
 
 @app.get("/search/{key}")

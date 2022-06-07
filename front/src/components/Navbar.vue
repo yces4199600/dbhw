@@ -85,10 +85,10 @@
               <label>商品名稱</label>
               <input class="form-control" name="newName" v-model="arr.name">
             </div>
-            <div class="form-group">
+            <!-- <div class="form-group">
               <label for="exampleInputPassword1">商品圖片</label>
               <input  class="form-control" name="imageUrl" v-model="arr.img_url">
-            </div>
+            </div> -->
             <div class="form-group">
               <label for="exampleInputPassword1">商品價錢</label>
               <input class="form-control" name="price" v-model="arr.price">
@@ -118,7 +118,6 @@ export default {
       num:0,
       arr:{
         name: "",
-        img_url: "",
         price:0,
         detail: "",
       },
@@ -169,12 +168,11 @@ export default {
       this.$router.push("Index")
     },
     createProduct(){
-      this.$http.get('http://localhost:8000/new/' + this.arr.name + '/' + this.arr.img_url  + '/' + this.arr.price  + '/' + this.arr.detail)
+      this.$http.get('http://localhost:8000/new/' + this.arr.name + '/' + this.arr.price  + '/' + this.arr.detail)
       .then( () => this.$emitter.emit('reload',1))
       .catch( r => console.log(r))
 
       this.arr.name= ""
-      this.arr.img_url= ""
       this.arr.price= 0
       this.arr.detail= ""
     }

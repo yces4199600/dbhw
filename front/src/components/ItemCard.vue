@@ -45,10 +45,10 @@
                       <input class="form-control" name="oldName" type="text" :placeholder="item.name" readonly>
                       <input class="form-control" name="newName" :value="item.name">
                     </div>
-                    <div class="form-group">
+                    <!-- <div class="form-group">
                       <label for="exampleInputPassword1">商品圖片</label>
                       <input  class="form-control" name="img_url" :value="item.img_url">
-                    </div>
+                    </div> -->
                     <div class="form-group">
                       <label for="exampleInputPassword1">商品價錢</label>
                       <input class="form-control" name="price" :value="item.price">
@@ -149,11 +149,11 @@ export default {
       let b = document.getElementById("form-"+id).getElementsByTagName("textarea")
       this.editedData.oldName = a[0].placeholder
       this.editedData.newName = a[1].value
-      this.editedData.img_url = a[2].value
-      this.editedData.price = a[3].value
+      // this.editedData.img_url = a[2].value
+      this.editedData.price = a[2].value
       this.editedData.detail = b[0].value
 
-      this.$http.get('http://localhost:8000/edit/' + id +'/' + this.editedData.newName + '/' + this.editedData.img_url + '/' + this.editedData.price + '/' + this.editedData.detail)
+      this.$http.get('http://localhost:8000/edit/' + id +'/' + this.editedData.newName + '/'  + this.editedData.price + '/' + this.editedData.detail)
       .then( () => this.getData())
       .catch( r => console.log(r))
     },
